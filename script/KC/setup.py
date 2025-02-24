@@ -472,9 +472,9 @@ def webui_selection(ui, which_sd):
         'ComfyUI': 'https://github.com/comfyanonymous/ComfyUI',
         'ReForge': 'https://github.com/Panchovix/stable-diffusion-webui-reForge ReForge',
         'SwarmUI': 'https://github.com/mcmonkeyprojects/SwarmUI',
-        'Oforge' : 'https://github.com/rinme/stable-diffusion-webui-forge-online',
-        'Anapnoe' : 'https://github.com/anapnoe/sd-webui-ux',
-        'Anapnoe-Forge' : 'https://github.com/anapnoe/stable-diffusion-webui-ux-forge'
+        'Oforge' : 'https://github.com/rinme/stable-diffusion-webui-forge-online Oforge',
+        'Anapnoe' : 'https://github.com/anapnoe/sd-webui-ux Anapnoe',
+        'Anapnoe-Forge' : 'https://github.com/anapnoe/stable-diffusion-webui-ux-forge Anapnoe-Forge'
     }
 
     if ui in repo_url:
