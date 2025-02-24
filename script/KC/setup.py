@@ -61,12 +61,12 @@ KANDANG = STR / 'KANDANG.py'
 TMP.mkdir(parents=True, exist_ok=True)
 SRC.mkdir(parents=True, exist_ok=True)
 
-VALID_WEBUI_OPTIONS = ["A1111", "Forge", "ComfyUI", "ReForge", "SwarmUI"]
+VALID_WEBUI_OPTIONS = ["A1111", "Forge", "ComfyUI", "ReForge", "SwarmUI", "Oforge", "Anapnoe", "Anapnoe-Forge"]
 VALID_SD_OPTIONS = ["1.5", "xl"]
 
 def prevent_silly():
     parser = argparse.ArgumentParser(description="WebUI Installer Script for Kaggle and Google Colab")
-    parser.add_argument('--webui', required=True, help="available webui: A1111, Forge, ComfyUI, ReForge, SwarmUI")
+    parser.add_argument('--webui', required=True, help="available webui: A1111, Forge, ComfyUI, ReForge, SwarmUI, Oforge, Anapnoe, Anapnoe-Forge")
     parser.add_argument('--sd', required=True, help="available sd: 1.5, xl")
     parser.add_argument('--civitai_key', required=True, help="your CivitAI API key")
     parser.add_argument('--hf_read_token', default=None, help="your Huggingface READ Token (optional)")
@@ -286,6 +286,54 @@ def sym_link(U, M):
             ]
         },
 
+        'Oforge': {
+            'pre': [
+                f'rm -rf {M / "Stable-diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "ControlNet"}',
+                f'rm -rf {M / "svd"} {M / "z123"} {M / "clip"} {M / "unet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "ControlNet"),
+                (TMP / "z123", M / "z123"),
+                (TMP / "svd", M / "svd"),
+                (TMP / "clip", M / "clip"),
+                (TMP / "unet", M / "unet")
+            ]
+        },
+
+        'Anapnoe': {
+            'pre': [
+                f'rm -rf {M / "Stable-diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "ControlNet"}',
+                f'rm -rf {M / "svd"} {M / "z123"} {M / "clip"} {M / "unet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "ControlNet"),
+                (TMP / "z123", M / "z123"),
+                (TMP / "svd", M / "svd"),
+                (TMP / "clip", M / "clip"),
+                (TMP / "unet", M / "unet")
+            ]
+        },
+
+         'Anapnoe-Forge': {
+            'pre': [
+                f'rm -rf {M / "Stable-diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "ControlNet"}',
+                f'rm -rf {M / "svd"} {M / "z123"} {M / "clip"} {M / "unet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "ControlNet"),
+                (TMP / "z123", M / "z123"),
+                (TMP / "svd", M / "svd"),
+                (TMP / "clip", M / "clip"),
+                (TMP / "unet", M / "unet")
+            ]
+        },
+       
         'ComfyUI': {
             'pre': [
                 f'rm -rf {M / "checkpoints/tmp_ckpt"} {M / "loras/tmp_lora"} {M / "controlnet"}',
@@ -319,7 +367,7 @@ def sym_link(U, M):
     cfg = configs.get(U)
     [SyS(f'{cmd}') for cmd in cfg['pre']]
 
-    if U in ['A1111', 'Forge', 'ReForge']:
+    if U in ['A1111', 'Forge', 'ReForge', 'Oforge', 'Anapnoe', 'Anapnoe-Forge']:
         [(M / d).mkdir(parents=True, exist_ok=True) for d in ["Lora", "ESRGAN"]]
 
     [SyS(f'ln -s {src} {tg}') for src, tg in cfg['links']]
@@ -328,7 +376,7 @@ def sym_link(U, M):
 def webui_req(U, W, M):
     CD(W)
 
-    if U in ['A1111', 'Forge', 'ComfyUI', 'ReForge']:
+    if U in ['A1111', 'Forge', 'ComfyUI', 'ReForge', 'Oforge', 'Anapnoe', 'Anapnoe-Forge']:
         pull(f"https://github.com/gutris1/segsmaker {U.lower()} {W}")
     elif U == 'SwarmUI':
         M.mkdir(parents=True, exist_ok=True)
@@ -423,7 +471,10 @@ def webui_selection(ui, which_sd):
         'Forge': 'https://github.com/lllyasviel/stable-diffusion-webui-forge Forge',
         'ComfyUI': 'https://github.com/comfyanonymous/ComfyUI',
         'ReForge': 'https://github.com/Panchovix/stable-diffusion-webui-reForge ReForge',
-        'SwarmUI': 'https://github.com/mcmonkeyprojects/SwarmUI'
+        'SwarmUI': 'https://github.com/mcmonkeyprojects/SwarmUI',
+        'Oforge' : 'https://github.com/rinme/stable-diffusion-webui-forge-online',
+        'Anapnoe' : 'https://github.com/anapnoe/sd-webui-ux',
+        'Anapnoe-Forge' : 'https://github.com/anapnoe/stable-diffusion-webui-ux-forge'
     }
 
     if ui in repo_url:
@@ -455,7 +506,7 @@ def webui_checker():
             CD(WEBUI)
             if ui in ['A1111', 'ComfyUI', 'SwarmUI']:
                 SyS("git pull origin master")
-            elif ui in ['Forge', 'ReForge']:
+            elif ui in ['Forge', 'ReForge', 'Oforge', 'Anapnoe', 'Anapnoe-Forge']:
                 SyS("git pull origin main")
 
     else:
