@@ -55,11 +55,11 @@
 }
 
 .btn-cn-15 {
-    background-image: url('https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5f06d0e2-5959-4c31-be80-546735970d76/original=true,quality=90/00014-1506.jpeg');
+    background-image: url('https://raw.githubusercontent.com/EdithForsaken/edith-colab/refs/heads/main/VSD/sd.jpg');
 }
 
 .btn-cn-xl {
-    background-image: url('https://i.imgur.com/giAg91c.jpg');
+    background-image: url('https://raw.githubusercontent.com/EdithForsaken/edith-colab/refs/heads/main/VSD/sdxl.jpg');
 }
 
 .btn-cn-15::after, .btn-cn-xl::after {
